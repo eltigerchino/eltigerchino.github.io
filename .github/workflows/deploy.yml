@@ -5,7 +5,7 @@ on:
     branches: ['main']
 
 jobs:
-  cache_and_install:
+  build_site:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,12 +39,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-  build_site:
-    needs: cache_and_install
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: build
+      - name: Build
         env:
           BASE_PATH: '/${{ github.event.repository.name }}'
         run: |
@@ -57,7 +52,7 @@ jobs:
           path: 'build/'
 
   deploy:
-    needs: [cache_and_install, build_site]
+    needs: build_site
     runs-on: ubuntu-latest
 
     permissions:
